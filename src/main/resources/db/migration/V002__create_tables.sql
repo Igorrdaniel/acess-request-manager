@@ -13,19 +13,19 @@ CREATE TABLE IF NOT EXISTS tb_modules (
 );
 
 CREATE TABLE IF NOT EXISTS tb_module_allowed_departments (
-  module_id INTEGER REFERENCES modules(id),
+  module_id INTEGER REFERENCES tb_modules(id),
   department department_enum NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tb_module_incompatibles (
-  module_id INTEGER REFERENCES modules(id),
-  incompatible_module_id INTEGER REFERENCES modules(id)
+  module_id INTEGER REFERENCES tb_modules(id),
+  incompatible_module_id INTEGER REFERENCES tb_modules(id)
 );
 
 CREATE TABLE IF NOT EXISTS tb_access_requests (
   id uuid PRIMARY KEY,
   protocol VARCHAR(20) UNIQUE NOT NULL,
-  user_id INTEGER REFERENCES users(id),
+  user_id INTEGER REFERENCES tb_users(id),
   justification TEXT NOT NULL,
   urgent BOOLEAN DEFAULT FALSE,
   status status_enum NOT NULL,
@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS tb_access_requests (
 
 CREATE TABLE IF NOT EXISTS tb_access_request_modules (
   access_request_id INTEGER REFERENCES access_requests(id),
-  module_id INTEGER REFERENCES modules(id)
+  module_id INTEGER REFERENCES tb_modules(id)
 );
 
 CREATE TABLE IF NOT EXISTS tb_user_active_modules (
-  user_id INTEGER REFERENCES users(id),
-  module_id INTEGER REFERENCES modules(id),
+  user_id INTEGER REFERENCES tb_users(id),
+  module_id INTEGER REFERENCES tb_modules(id),
   expiration_date TIMESTAMP,
   PRIMARY KEY (user_id, module_id)
 );

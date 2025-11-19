@@ -1,4 +1,4 @@
-CREATE TYPE departamento_enum AS ENUM (
+CREATE TYPE department_enum AS ENUM (
 'TI', 'FINANCEIRO', 'RH', 'OPERACOES', 'OUTROS'
 );
 
