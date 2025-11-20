@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS tb_access_requests (
 );
 
 CREATE TABLE IF NOT EXISTS tb_access_request_modules (
-  access_request_id INTEGER REFERENCES access_requests(id),
+  access_request_id INTEGER REFERENCES tb_access_requests(id),
   module_id INTEGER REFERENCES tb_modules(id)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS tb_user_active_modules (
 
 CREATE TABLE IF NOT EXISTS tb_request_history (
   id uuid PRIMARY KEY,
-  access_request_id INTEGER REFERENCES access_requests(id),
+  access_request_id INTEGER REFERENCES tb_access_requests(id),
   change_date TIMESTAMP NOT NULL,
   description TEXT NOT NULL
 );
