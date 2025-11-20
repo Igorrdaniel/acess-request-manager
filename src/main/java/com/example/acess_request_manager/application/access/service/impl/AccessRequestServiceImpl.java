@@ -3,7 +3,6 @@ package com.example.acess_request_manager.application.access.service.impl;
 import com.example.acess_request_manager.application.access.dto.AccessRequestCreateDto;
 import com.example.acess_request_manager.application.access.dto.AccessRequestResponseDto;
 import com.example.acess_request_manager.application.access.service.AccessRequestService;
-import com.example.acess_request_manager.application.module.dto.ModuleDto;
 import com.example.acess_request_manager.domain.access.model.AccessRequest;
 import com.example.acess_request_manager.domain.access.model.Status;
 import com.example.acess_request_manager.domain.access.repository.AccessRequestRepository;
@@ -17,7 +16,6 @@ import com.example.acess_request_manager.domain.user.model.User;
 import com.example.acess_request_manager.domain.user.repository.UserRepository;
 import com.example.acess_request_manager.security.jwt.impl.UserDetailsImpl;
 import jakarta.validation.Valid;
-
 import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -112,7 +110,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
   }
 
   @Override
-  public AccessRequestResponseDto gerRequestDetails(UUID id) {
+  public AccessRequestResponseDto getRequestDetails(UUID id) {
     User user = getCurrentUser();
     AccessRequest request =
         accessRequestRepository

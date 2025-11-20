@@ -21,7 +21,7 @@ public interface AccessRequestService {
       Boolean urgent,
       int page);
 
-  AccessRequestResponseDto gerRequestDetails(UUID id);
+  AccessRequestResponseDto getRequestDetails(UUID id);
 
   String renewRequest(UUID id);
 
