@@ -1,9 +1,9 @@
 package com.example.acess_request_manager.domain.module.repository;
 
+import com.example.acess_request_manager.domain.module.model.ModuleEntity;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface ModuleRepository extends JpaRepository<Module, UUID> {}
+public interface ModuleRepository extends JpaRepository<ModuleEntity, UUID> {}

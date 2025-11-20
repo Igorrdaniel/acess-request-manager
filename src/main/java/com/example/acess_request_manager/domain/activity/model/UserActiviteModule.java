@@ -1,6 +1,6 @@
 package com.example.acess_request_manager.domain.activity.model;
 
-import com.example.acess_request_manager.domain.module.model.Module;
+import com.example.acess_request_manager.domain.module.model.ModuleEntity;
 import com.example.acess_request_manager.domain.user.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public class UserActiviteModule {
   @Id
   @ManyToOne
   @JoinColumn(name = "module_id")
-  private Module module;
+  private ModuleEntity module;
 
   private LocalDateTime expirationDate;
 }

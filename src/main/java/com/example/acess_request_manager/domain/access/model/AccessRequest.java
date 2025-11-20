@@ -1,14 +1,12 @@
 package com.example.acess_request_manager.domain.access.model;
 
-import com.example.acess_request_manager.domain.module.model.Module;
+import com.example.acess_request_manager.domain.module.model.ModuleEntity;
 import com.example.acess_request_manager.domain.request.model.RequestHistory;
 import com.example.acess_request_manager.domain.user.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import lombok.Data;
 
 @Entity
@@ -17,7 +15,7 @@ import lombok.Data;
 public class AccessRequest {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private UUID id;
 
   @Column(unique = true, nullable = false)
   private String protocol;
@@ -31,7 +29,7 @@ public class AccessRequest {
       name = "access_request_modules",
       joinColumns = @JoinColumn(name = "access_request_id"),
       inverseJoinColumns = @JoinColumn(name = "module_id"))
-  private Set<Module> modules = new HashSet<>();
+  private Set<ModuleEntity> modules = new HashSet<>();
 
   @Column(nullable = false)
   private String justification;
