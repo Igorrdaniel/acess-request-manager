@@ -34,7 +34,7 @@ public class AccessRequest {
   @Column(nullable = false)
   private String justification;
 
-  private boolean urgent;
+  private Boolean urgent;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -49,4 +49,8 @@ public class AccessRequest {
 
   @OneToMany(mappedBy = "accessRequest", cascade = CascadeType.ALL)
   private List<RequestHistory> history = new ArrayList<>();
+
+  public Boolean isUrgent() {
+    return urgent;
+  }
 }

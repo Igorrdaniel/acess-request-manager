@@ -10,7 +10,7 @@ import lombok.Data;
 @Table
 @Data
 @IdClass(UserActiveModuleId.class)
-public class UserActiviteModule {
+public class UserActiveModule {
   @Id
   @ManyToOne
   @JoinColumn(name = "user_id")

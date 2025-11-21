@@ -6,8 +6,8 @@ import com.example.acess_request_manager.application.access.service.AccessReques
 import com.example.acess_request_manager.domain.access.model.AccessRequest;
 import com.example.acess_request_manager.domain.access.model.Status;
 import com.example.acess_request_manager.domain.access.repository.AccessRequestRepository;
-import com.example.acess_request_manager.domain.activity.model.UserActiviteModule;
-import com.example.acess_request_manager.domain.activity.repository.UserActivityModuleRepository;
+import com.example.acess_request_manager.domain.activity.model.UserActiveModule;
+import com.example.acess_request_manager.domain.activity.repository.UserActiveModuleRepository;
 import com.example.acess_request_manager.domain.module.model.ModuleEntity;
 import com.example.acess_request_manager.domain.module.repository.ModuleRepository;
 import com.example.acess_request_manager.domain.request.model.RequestHistory;
@@ -16,13 +16,13 @@ import com.example.acess_request_manager.domain.user.model.User;
 import com.example.acess_request_manager.domain.user.repository.UserRepository;
 import com.example.acess_request_manager.security.jwt.impl.UserDetailsImpl;
 import jakarta.validation.Valid;
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,17 +34,17 @@ public class AccessRequestServiceImpl implements AccessRequestService {
   private final AccessRequestRepository accessRequestRepository;
   private final ModuleRepository moduleRepository;
   private final UserRepository userRepository;
-  private final UserActivityModuleRepository userActivityModuleRepository;
+  private final UserActiveModuleRepository userActiveModuleRepository;
 
   public AccessRequestServiceImpl(
       AccessRequestRepository accessRequestRepository,
       ModuleRepository moduleRepository,
       UserRepository userRepository,
-      UserActivityModuleRepository userActivityModuleRepository) {
+      UserActiveModuleRepository userActiveModuleRepository) {
     this.accessRequestRepository = accessRequestRepository;
     this.moduleRepository = moduleRepository;
     this.userRepository = userRepository;
-    this.userActivityModuleRepository = userActivityModuleRepository;
+    this.userActiveModuleRepository = userActiveModuleRepository;
   }
 
   @Transactional
@@ -101,7 +101,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
       Boolean urgent,
       int page) {
     User user = getCurrentUser();
-    Pageable pageable = (Pageable) PageRequest.of(page, 10, Sort.by("requestDate").descending());
+    Pageable pageable = PageRequest.of(page, 10, Sort.by("requestDate").descending());
     Page<AccessRequest> accessRequests =
         accessRequestRepository.findByUserWithFilter(
             user, protocol, status, startDate, endDate, urgent, pageable);
@@ -152,7 +152,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
       grantAccess(user, newRequest.getModules(), newRequest.getExpirationDate());
       addHistory(newRequest, "Renovação aprovada");
       // Revoga antigo? Não especificado, mas atualiza expiração nos ativos
-      userActivityModuleRepository.findByUser(user).stream()
+      userActiveModuleRepository.findByUser(user).stream()
           .filter(uam -> oldRequest.getModules().contains(uam.getModule()))
           .forEach(uam -> uam.setExpirationDate(newRequest.getExpirationDate()));
       accessRequestRepository.save(newRequest);
@@ -183,9 +183,9 @@ public class AccessRequestServiceImpl implements AccessRequestService {
     request.setStatus(Status.CANCELADO);
     addHistory(request, "Cancelado: " + motivo);
 
-    userActivityModuleRepository.findByUser(user).stream()
+    userActiveModuleRepository.findByUser(user).stream()
         .filter(uam -> request.getModules().contains(uam.getModule()))
-        .forEach(userActivityModuleRepository::delete);
+        .forEach(userActiveModuleRepository::delete);
 
     accessRequestRepository.save(request);
   }
@@ -215,7 +215,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
           if (!module.isActive()) {
             throw new IllegalArgumentException("Módulo inativo: " + module.getName());
           }
-          if (userActivityModuleRepository.existsByUserAndModule(user, module)) {
+          if (userActiveModuleRepository.existsByUserAndModule(user, module)) {
             throw new IllegalArgumentException("Já possui acesso ao módulo: " + module.getName());
           }
           // Verifica solicitação ativa para mesmo módulo (simplificado: checa requests ATIVAS)
@@ -234,11 +234,11 @@ public class AccessRequestServiceImpl implements AccessRequestService {
   private void grantAccess(User user, Set<ModuleEntity> modules, LocalDateTime expiration) {
     modules.forEach(
         module -> {
-          UserActiviteModule activiteModule = new UserActiviteModule();
+          UserActiveModule activiteModule = new UserActiveModule();
           activiteModule.setUser(user);
           activiteModule.setModule(module);
           activiteModule.setExpirationDate(expiration);
-          userActivityModuleRepository.save(activiteModule);
+          userActiveModuleRepository.save(activiteModule);
         });
   }
 
@@ -268,9 +268,9 @@ public class AccessRequestServiceImpl implements AccessRequestService {
       }
     }
 
-    List<UserActiviteModule> activeModules = userActivityModuleRepository.findByUser(user);
+    List<UserActiveModule> activeModules = userActiveModuleRepository.findByUser(user);
     for (ModuleEntity reqModule : requestedModules) {
-      for (UserActiviteModule active : activeModules) {
+      for (UserActiveModule active : activeModules) {
         if (reqModule.getIncompatibleModules().contains(active.getModule())
             || active.getModule().getIncompatibleModules().contains(reqModule)) {
           return "Módulo incompatível com outro módulo já ativo: " + reqModule.getName();
@@ -278,7 +278,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
       }
     }
 
-    int currentCount = userActivityModuleRepository.countByUser(user);
+    int currentCount = userActiveModuleRepository.countByUser(user);
     int limit = user.getDepartment() == Department.TI ? 10 : 5;
     if (currentCount + requestedModules.size() > limit) {
       return "Limite de módulos ativos atingido";

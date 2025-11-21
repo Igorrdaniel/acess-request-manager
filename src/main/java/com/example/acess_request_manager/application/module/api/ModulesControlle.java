@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Tags(value = {@Tag(name = "Modulos", description = "Gerenciamento de Modulos")})
-@RestController("/modules")
+@RestController
+@RequestMapping("/modules")
 public class ModulesControlle {
 
   private final ModuleService moduleService;
