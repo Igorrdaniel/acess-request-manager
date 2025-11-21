@@ -10,11 +10,11 @@ import java.util.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "access_requests")
+@Table(name = "tb_access_requests")
 @Data
 public class AccessRequest {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   @Column(unique = true, nullable = false)
@@ -26,7 +26,7 @@ public class AccessRequest {
 
   @ManyToMany
   @JoinTable(
-      name = "access_request_modules",
+      name = "tb_access_request_modules",
       joinColumns = @JoinColumn(name = "access_request_id"),
       inverseJoinColumns = @JoinColumn(name = "module_id"))
   private Set<ModuleEntity> modules = new HashSet<>();
