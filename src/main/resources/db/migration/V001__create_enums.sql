@@ -1,7 +1,0 @@
-CREATE TYPE department_enum AS ENUM (
-'TI', 'FINANCEIRO', 'RH', 'OPERACOES', 'OUTROS'
-);
-
-CREATE TYPE status_enum AS ENUM (
-'ATIVO', 'NEGADO', 'CANCELADO'
-);

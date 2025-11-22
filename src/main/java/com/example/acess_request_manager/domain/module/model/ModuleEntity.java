@@ -2,20 +2,20 @@ package com.example.acess_request_manager.domain.module.model;
 
 import com.example.acess_request_manager.domain.user.model.Department;
 import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "tb_modules")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ModuleEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+  @Id private UUID id;
 
   @Column(nullable = false)
   private String name;
@@ -24,19 +24,21 @@ public class ModuleEntity {
 
   private Boolean active = true;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-      name = "module_allowed_departments",
+      name = "tb_module_allowed_departments",
       joinColumns = @JoinColumn(name = "module_id"))
   @Enumerated(EnumType.STRING)
-  private Set<Department> allowedDepartments = new HashSet<>();
+  @Column(name = "department")
+  private List<Department> allowedDepartments;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
-      name = "module_incompatibles",
+      name = "tb_module_incompatibles",
       joinColumns = @JoinColumn(name = "module_id"),
       inverseJoinColumns = @JoinColumn(name = "incompatible_module_id"))
-  private Set<ModuleEntity> incompatibleModules = new HashSet<>();
+  @Column(name = "incompatible_module_id")
+  private Set<ModuleEntity> incompatibleModules;
 
   public Boolean isActive() {
     return active;

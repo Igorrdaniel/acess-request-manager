@@ -8,16 +8,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.Generated;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Generated
 @Tags(value = {@Tag(name = "Requests", description = "Gerenciamento de Requests de Acesso")})
@@ -37,6 +37,7 @@ public class AccessRequestController {
   @ApiResponses(
       value = {@ApiResponse(responseCode = "201", description = "Solicitação criada com sucesso")})
   @PostMapping
+  @SecurityRequirement(name = "bearer-key")
   public ResponseEntity<String> create(
       @Parameter(description = "Dados da Solicitação de Acesso") @Valid @RequestBody
           AccessRequestCreateDto dto) {
@@ -51,6 +52,7 @@ public class AccessRequestController {
         @ApiResponse(responseCode = "200", description = "Solicitações listadas com sucesso")
       })
   @GetMapping
+  @SecurityRequirement(name = "bearer-key")
   public ResponseEntity<Page<AccessRequestResponseDto>> list(
       @RequestParam(required = false) String protocol,
       @RequestParam(required = false) Status status,
@@ -72,6 +74,7 @@ public class AccessRequestController {
             description = "Detalhes da Solicitação retornados com sucesso")
       })
   @GetMapping("/{id}")
+  @SecurityRequirement(name = "bearer-key")
   public ResponseEntity<AccessRequestResponseDto> details(
       @Parameter(description = "ID da Solicitação de Acesso") @PathVariable UUID id) {
     return ResponseEntity.ok(accessRequestService.getRequestDetails(id));
@@ -85,6 +88,7 @@ public class AccessRequestController {
         @ApiResponse(responseCode = "200", description = "Solicitação renovada com sucesso")
       })
   @PutMapping("/{id}/renew")
+  @SecurityRequirement(name = "bearer-key")
   public ResponseEntity<String> renew(
       @Parameter(description = "ID da Solicitação de Acesso") @PathVariable UUID id) {
     return ResponseEntity.ok(accessRequestService.renewRequest(id));
@@ -98,6 +102,7 @@ public class AccessRequestController {
         @ApiResponse(responseCode = "200", description = "Solicitação cancelada com sucesso")
       })
   @PutMapping("/{id}/cancel")
+  @SecurityRequirement(name = "bearer-key")
   public ResponseEntity<Void> cancel(
       @Parameter(description = "ID da Solicitação de Acesso") @PathVariable UUID id,
       @Parameter(description = "Motivo do Cancelamento") @RequestParam String motivo) {

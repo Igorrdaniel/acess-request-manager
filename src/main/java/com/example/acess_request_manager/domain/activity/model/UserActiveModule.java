@@ -4,11 +4,15 @@ import com.example.acess_request_manager.domain.module.model.ModuleEntity;
 import com.example.acess_request_manager.domain.user.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.Data;
+
+import lombok.*;
 
 @Entity
-@Table
-@Data
+@Table(name = "tb_user_active_modules")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @IdClass(UserActiveModuleId.class)
 public class UserActiveModule {
   @Id

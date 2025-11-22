@@ -3,9 +3,9 @@ package com.example.acess_request_manager.application.module.service.impl;
 import com.example.acess_request_manager.application.module.dto.ModuleDto;
 import com.example.acess_request_manager.application.module.service.ModuleService;
 import com.example.acess_request_manager.domain.module.repository.ModuleRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ModuleServiceImpl implements ModuleService {
@@ -16,10 +16,9 @@ public class ModuleServiceImpl implements ModuleService {
     this.moduleRepository = moduleRepository;
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<ModuleDto> getAllModules() {
-    return moduleRepository.findAll().stream()
-        .map(ModuleDto::map)
-        .toList();
+    return moduleRepository.findAllWithDetails().stream().map(ModuleDto::map).toList();
   }
 }

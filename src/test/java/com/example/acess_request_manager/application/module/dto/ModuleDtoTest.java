@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.acess_request_manager.domain.module.model.ModuleEntity;
 import com.example.acess_request_manager.domain.user.model.Department;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+
+import java.util.*;
+
 import org.junit.jupiter.api.Test;
 
 class ModuleDtoTest {
@@ -14,7 +14,7 @@ class ModuleDtoTest {
   @Test
   void testModuleMapping() {
     UUID id = UUID.randomUUID();
-    Set<Department> departments = new HashSet<>();
+    List<Department> departments = new ArrayList<>();
     departments.add(Department.TI);
     Set<ModuleEntity> incompatibleModules = new HashSet<>();
     ModuleEntity incompatibleModule = new ModuleEntity();
@@ -43,7 +43,7 @@ class ModuleDtoTest {
   void testDtoGettersAndSetters() {
     ModuleDto moduleDto = new ModuleDto();
     UUID id = UUID.randomUUID();
-    Set<Department> departments = new HashSet<>();
+    List<Department> departments = new ArrayList<>();
     Set<UUID> incompatibleIds = new HashSet<>();
 
     moduleDto.setId(id);

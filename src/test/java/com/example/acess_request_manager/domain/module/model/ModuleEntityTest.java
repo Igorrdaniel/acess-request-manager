@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.example.acess_request_manager.domain.user.model.Department;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Set;
+
 class ModuleEntityTest {
 
     @Test
@@ -45,7 +48,7 @@ class ModuleEntityTest {
     @Test
     void testAddAllowedDepartment() {
         ModuleEntity module = new ModuleEntity();
-        module.getAllowedDepartments().add(Department.TI);
+        module.setAllowedDepartments(List.of(Department.TI));
         assertTrue(module.getAllowedDepartments().contains(Department.TI));
     }
 
@@ -53,7 +56,7 @@ class ModuleEntityTest {
     void testAddIncompatibleModule() {
         ModuleEntity module = new ModuleEntity();
         ModuleEntity incompatibleModule = new ModuleEntity();
-        module.getIncompatibleModules().add(incompatibleModule);
+        module.setIncompatibleModules(Set.of(incompatibleModule));
         assertTrue(module.getIncompatibleModules().contains(incompatibleModule));
     }
 }

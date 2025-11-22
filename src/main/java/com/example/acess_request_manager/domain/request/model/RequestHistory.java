@@ -4,11 +4,15 @@ import com.example.acess_request_manager.domain.access.model.AccessRequest;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.Data;
+
+import lombok.*;
 
 @Entity
 @Table(name = "tb_request_history")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestHistory {
 
   @Id

@@ -1,6 +1,5 @@
 package com.example.acess_request_manager.security.jwt;
 
-
 import com.example.acess_request_manager.security.jwt.impl.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,22 +15,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtConfig {
 
-  @Value("${jwt.secret}")
-  private String secret;
+  private final Long expirationTime;
 
-  @Value("${jwt.expiration}")
-  private Long expirationTime;
+  private final SecretKey signingKey;
 
-  private final SecretKey signingKey = getSigningKey();
-
-  private SecretKey getSigningKey() {
+  public JwtConfig(
+      @Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") Long expirationTime) {
+    this.expirationTime = expirationTime;
     byte[] keyBytes = Decoders.BASE64.decode(secret);
-    return Keys.hmacShaKeyFor(keyBytes);
+    this.signingKey = Keys.hmacShaKeyFor(keyBytes);
   }
 
   public String generateToken(UserDetailsImpl userDetails) {
-      Date now = new Date();
-      Date expiry = new Date(now.getTime() + expirationTime);
+    Date now = new Date();
+    Date expiry = new Date(now.getTime() + expirationTime);
 
     return Jwts.builder()
         .claims()
@@ -54,11 +51,7 @@ public class JwtConfig {
   }
 
   private Claims extractAllClaims(String token) {
-    return Jwts.parser()
-        .verifyWith(signingKey)
-        .build()
-        .parseSignedClaims(token)
-        .getPayload();
+    return Jwts.parser().verifyWith(signingKey).build().parseSignedClaims(token).getPayload();
   }
 
   public boolean isTokenValid(String token, UserDetails userDetails) {

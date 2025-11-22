@@ -16,7 +16,6 @@ import com.example.acess_request_manager.domain.user.model.Department;
 import com.example.acess_request_manager.domain.user.model.User;
 import com.example.acess_request_manager.domain.user.repository.UserRepository;
 import com.example.acess_request_manager.security.jwt.impl.UserDetailsImpl;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +58,7 @@ class AccessRequestServiceImplTest {
     module1.setId(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
     module1.setName("Portal");
     module1.setActive(true);
-    module1.setAllowedDepartments(Set.of(Department.TI));
+    module1.setAllowedDepartments(List.of(Department.TI));
     module1.setIncompatibleModules(new HashSet<>());
 
     UserDetailsImpl userDetails = new UserDetailsImpl(user);
@@ -106,7 +105,7 @@ class AccessRequestServiceImplTest {
   @Test
   void createRequest_Denied_DepartmentIncompatibility() {
     user.setDepartment(Department.OUTROS);
-    module1.setAllowedDepartments(Set.of(Department.TI));
+    module1.setAllowedDepartments(List.of(Department.TI));
 
     Set<UUID> moduleIds = Set.of(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
     AccessRequestCreateDto dto =
@@ -496,7 +495,7 @@ class AccessRequestServiceImplTest {
     oldRequest.setExpirationDate(LocalDateTime.now().plusDays(29));
 
     user.setDepartment(Department.OUTROS);
-    module1.setAllowedDepartments(Set.of(Department.TI));
+    module1.setAllowedDepartments(List.of(Department.TI));
 
     when(accessRequestRepository.findById(
             eq(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))))

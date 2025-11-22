@@ -4,6 +4,7 @@ import com.example.acess_request_manager.domain.module.model.ModuleEntity;
 import com.example.acess_request_manager.domain.user.model.Department;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class ModuleDto {
   private String name;
   private String description;
   private Boolean active;
-  private Set<Department> allowedDepartments;
+  private List<Department> allowedDepartments;
   private Set<UUID> incompatibleModuleIds;
 
   public static ModuleDto map(ModuleEntity moduleEntity) {

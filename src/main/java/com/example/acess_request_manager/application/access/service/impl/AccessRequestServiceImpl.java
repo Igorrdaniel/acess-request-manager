@@ -80,8 +80,8 @@ public class AccessRequestServiceImpl implements AccessRequestService {
       grantAccess(user, modules, accessRequest.getExpirationDate());
       addHistory(accessRequest, "Solicitação aprovada automaticamente");
       accessRequestRepository.save(accessRequest);
-      return "Solicitação criada com sucesso! Protocolo: "
-          + accessRequest.getProtocol()
+      return "Solicitação criada com sucesso! ID: "
+          + accessRequest.getId()
           + ". Seus acessos já estão disponíveis!";
     } else {
       accessRequest.setStatus(Status.NEGADO);
@@ -92,6 +92,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
     }
   }
 
+  @Transactional(readOnly = true)
   @Override
   public Page<AccessRequestResponseDto> getUserRequest(
       String protocol,
@@ -109,6 +110,7 @@ public class AccessRequestServiceImpl implements AccessRequestService {
     return accessRequests.map(AccessRequestResponseDto::map);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public AccessRequestResponseDto getRequestDetails(UUID id) {
     User user = getCurrentUser();

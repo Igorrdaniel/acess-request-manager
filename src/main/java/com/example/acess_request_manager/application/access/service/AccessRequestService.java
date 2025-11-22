@@ -4,15 +4,14 @@ import com.example.acess_request_manager.application.access.dto.AccessRequestCre
 import com.example.acess_request_manager.application.access.dto.AccessRequestResponseDto;
 import com.example.acess_request_manager.domain.access.model.Status;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 
 public interface AccessRequestService {
 
   String createRequest(@Valid AccessRequestCreateDto accessRequestCreateDto);
-
+  
   Page<AccessRequestResponseDto> getUserRequest(
       String protocol,
       Status status,

@@ -7,11 +7,14 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "tb_access_requests")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccessRequest {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
