@@ -53,15 +53,14 @@ public class AccessRequestController {
       })
   @GetMapping
   @SecurityRequirement(name = "bearer-key")
-  public ResponseEntity<Page<AccessRequestResponseDto>> list(
+  public Page<AccessRequestResponseDto> list(
       @RequestParam(required = false) String protocol,
       @RequestParam(required = false) Status status,
       @RequestParam(required = false) LocalDateTime startDate,
       @RequestParam(required = false) LocalDateTime endDate,
       @RequestParam(required = false) Boolean urgent,
       @RequestParam(defaultValue = "0") int page) {
-    return ResponseEntity.ok(
-        accessRequestService.getUserRequest(protocol, status, startDate, endDate, urgent, page));
+    return accessRequestService.getUserRequest(protocol, status, startDate, endDate, urgent, page);
   }
 
   @Operation(
@@ -75,9 +74,9 @@ public class AccessRequestController {
       })
   @GetMapping("/{id}")
   @SecurityRequirement(name = "bearer-key")
-  public ResponseEntity<AccessRequestResponseDto> details(
+  public AccessRequestResponseDto details(
       @Parameter(description = "ID da Solicitação de Acesso") @PathVariable UUID id) {
-    return ResponseEntity.ok(accessRequestService.getRequestDetails(id));
+    return accessRequestService.getRequestDetails(id);
   }
 
   @Operation(

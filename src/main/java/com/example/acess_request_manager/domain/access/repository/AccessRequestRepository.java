@@ -20,8 +20,8 @@ public interface AccessRequestRepository extends JpaRepository<AccessRequest, UU
       "SELECT ar FROM AccessRequest ar WHERE ar.user = :user "
           + "AND (:protocol IS NULL OR ar.protocol LIKE %:protocol%) "
           + "AND (:status IS NULL OR ar.status = :status) "
-          + "AND (:startDate IS NULL OR ar.requestDate >= :startDate) "
-          + "AND (:endDate IS NULL OR ar.requestDate <= :endDate) "
+          + "AND (cast(:startDate as timestamp) IS NULL OR ar.requestDate >= :startDate) "
+          + "AND (cast(:endDate as timestamp) IS NULL OR ar.requestDate <= :endDate) "
           + "AND (:urgent IS NULL OR ar.urgent = :urgent)")
   Page<AccessRequest> findByUserWithFilter(
       @Param("user") User user,

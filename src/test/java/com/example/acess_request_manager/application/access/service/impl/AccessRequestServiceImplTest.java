@@ -509,6 +509,20 @@ class AccessRequestServiceImplTest {
   }
 
   @Test
+  void renewRequest_NotFound() {
+    when(accessRequestRepository.findById(
+            eq(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))))
+        .thenReturn(Optional.empty());
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> service.renewRequest(UUID.fromString("123e4567-e89b-12d3-a456-426614174000")),
+        "Solicitação não encontrada");
+
+    verify(accessRequestRepository, never()).save(any());
+  }
+
+  @Test
   void cancelRequest_Success() {
     AccessRequest request = new AccessRequest();
     request.setId(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
