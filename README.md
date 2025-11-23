@@ -46,7 +46,7 @@ Após `mvn jacoco:report`, abra target/site/jacoco/index.html.  Exporte para PDF
 
 ## Exemplos de Requisições
 
-- POST /auth/login: {"email": "[ti@user.com]", "tiuser": "password"} -> Retorna JWT
+- POST /auth/login: {"email": "[ti@user.com]", "password": "tiuser"} -> Retorna JWT
 - POST /requests: (com Authorization Bearer JWT) {"moduleIds": [1], "justification": "Preciso para trabalho", "urgent": false}
 - GET /requests: ?page=0&status=ATIVO
 - Use Postman/Curl
